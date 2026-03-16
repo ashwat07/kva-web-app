@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect } from "react";
 import SplashScreen from "./SplashScreen";
 import Header from "./Header";
 import Footer from "./Footer";
+import BottomNav from "./BottomNav";
 import NotificationManager, { checkUpcomingEvents } from "./NotificationManager";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
@@ -25,8 +26,9 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       {showSplash && <SplashScreen onFinish={handleSplashFinish} />}
       <div className={showSplash ? "opacity-0" : "opacity-100 transition-opacity duration-500"}>
         <Header />
-        <main className="min-h-screen">{children}</main>
+        <main className="min-h-screen pb-20 md:pb-0">{children}</main>
         <Footer />
+        <BottomNav />
         <NotificationManager />
       </div>
     </>
