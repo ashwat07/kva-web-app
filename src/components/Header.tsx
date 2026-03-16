@@ -23,9 +23,24 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-primary/20 bg-white/95 shadow-sm backdrop-blur-md">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2">
+      <div
+        className="mx-auto flex max-w-7xl items-center justify-between py-2"
+        style={{
+          paddingLeft: "max(1rem, env(safe-area-inset-left))",
+          paddingRight: "max(1rem, env(safe-area-inset-right))",
+          paddingTop: "env(safe-area-inset-top, 0)",
+        }}
+      >
         <Link href="/" className="flex items-center gap-3">
-          <Image src="/kva-logo.png" alt="KVA Logo" width={48} height={48} className="rounded-full" />
+          <div className="relative h-15 w-15 flex-shrink-0 overflow-hidden rounded-xl">
+            <Image
+              src="/kva-logo.png"
+              alt="KVA Logo"
+              fill
+              className="object-contain"
+              sizes="48px"
+            />
+          </div>
           <div className="hidden sm:block">
             <p className="text-sm font-bold text-kva-text leading-tight">The Karnataka Vishwakarma</p>
             <p className="text-xs text-kva-text-light">Association (Regd.), Mumbai</p>
