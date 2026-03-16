@@ -20,9 +20,13 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
       className={`fixed inset-0 z-50 flex flex-col items-center justify-center ${fadeOut ? "animate-fade-out" : ""}`}
       style={{
         background: "linear-gradient(135deg, #D4920B 0%, #B37A09 50%, #8B6914 100%)",
+        paddingTop: "env(safe-area-inset-top, 0)",
+        paddingBottom: "env(safe-area-inset-bottom, 0)",
+        paddingLeft: "env(safe-area-inset-left, 0)",
+        paddingRight: "env(safe-area-inset-right, 0)",
       }}
     >
-      <div className="animate-scale-up flex flex-col items-center">
+      <div className="animate-scale-up flex flex-col items-center px-4">
         <div className="relative h-40 w-40 md:h-52 md:w-52">
           <Image
             src="/kva-logo.png"
@@ -42,7 +46,13 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
           <p className="mt-2 text-sm text-white/70">Est. 1945</p>
         </div>
       </div>
-      <div className="absolute bottom-12 animate-slide-up" style={{ animationDelay: "0.8s" }}>
+      <div
+        className="absolute animate-slide-up"
+        style={{
+          animationDelay: "0.8s",
+          bottom: "calc(3rem + env(safe-area-inset-bottom, 0px))",
+        }}
+      >
         <div className="h-1 w-24 overflow-hidden rounded-full bg-white/30">
           <div
             className="h-full rounded-full bg-white"
