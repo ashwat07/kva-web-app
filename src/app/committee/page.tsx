@@ -5,26 +5,35 @@ export const metadata: Metadata = {
   title: "Committee | Karnataka Vishwakarma Association",
 };
 
-const committees = [
-  {
-    name: "Managing Committee",
-    members: [
-      { role: "President", name: "To be updated" },
-      { role: "Vice President", name: "To be updated" },
-      { role: "General Secretary", name: "To be updated" },
-      { role: "Joint Secretary", name: "To be updated" },
-      { role: "Treasurer", name: "To be updated" },
-    ],
-  },
-  {
-    name: "Mahila Vibhaga",
-    members: [
-      { role: "Chairperson", name: "To be updated" },
-      { role: "Vice Chairperson", name: "To be updated" },
-      { role: "Joint Convenor", name: "To be updated" },
-      { role: "Convenor", name: "To be updated" },
-    ],
-  },
+const managingCommitteeMembers = [
+  { name: "Ravish G Acharya", role: "President", photo: "/commitee-images/management-commitee/ravish.jpeg" },
+  { name: "Ganesh Kumar K", role: "Vice President", photo: "/commitee-images/management-commitee/ganesh-kumar.jpeg" },
+  { name: "Sudhir J Acharya", role: "Joint Secretary", photo: "/commitee-images/management-commitee/sudhir.jpeg" },
+  { name: "Prasad Acharya", role: "Joint Secretary", photo: "/commitee-images/management-commitee/prasad.jpeg" },
+  { name: "Baburaj M Acharya", role: "Treasurer", photo: "/commitee-images/management-commitee/baburaj.jpeg" },
+  { name: "Ravindra I P Acharya", role: "Joint Treasurer", photo: "/commitee-images/management-commitee/ravindra.jpeg" },
+];
+
+const mahilaVibhagaMembers = [
+  { name: "Sujata G Acharya", role: "Chairperson", photo: "/commitee-images/ladies-wing/sujata.jpeg" },
+  { name: "Veena Acharya", role: "Vice Chairperson", photo: "/commitee-images/ladies-wing/veena.jpeg" },
+  { name: "Amitha D Acharya", role: "Joint Convenor", photo: "/commitee-images/ladies-wing/amitha.jpeg" },
+  { name: "Rajeshwari Acharya", role: "Convenor", photo: "/commitee-images/ladies-wing/rajeshwari.jpeg" },
+  {name: "Kalpana C Acharya", role: "Member", photo: "/commitee-images/ladies-wing/kalpana.jpeg"},
+  {name: "Manjula R Acharya", role: "Member", photo: "/commitee-images/ladies-wing/manjula.jpeg"},
+  {name: "Shobha D Acharya", role: "Member", photo: "/commitee-images/ladies-wing/shobha.jpeg"},
+  {name: "Shubha S Acharya", role: "Member", photo: "/commitee-images/ladies-wing/shubha-sunil.jpeg"},
+  {name: "Suchitra H Acharya", role: "Member", photo: "/commitee-images/ladies-wing/suchitra.jpeg"},
+  {name: "Pushpalatha S Acharya", role: "Member", photo: "/commitee-images/ladies-wing/pushpa.jpeg"},
+  {name: "Jayalaxmi D Acharya", role: "Member", photo: "/commitee-images/ladies-wing/jayalaxmi-damodar.jpeg"},
+  {name: "Jayalaxmi J Acharya", role: "Member", photo: "/commitee-images/ladies-wing/jayalaxmi.jpeg"},
+  {name: "Rajivi K Acharya", role: "Member", photo: "/commitee-images/ladies-wing/rajivi.jpeg"},
+  {name: "Jayashree R Acharya", role: "Member", photo: "/commitee-images/ladies-wing/jayshree.jpeg"},
+  {name: "Meera S Acharya", role: "Member", photo: "/commitee-images/ladies-wing/meera.jpeg"},
+  {name: "Jayamala B Acharya", role: "Member", photo: "/commitee-images/ladies-wing/jayamala.jpeg"},
+  {name: "Usha S Acharya", role: "Member", photo: "/commitee-images/ladies-wing/usha-sadanand.jpeg"},
+  {name: "Yogini R Acharya", role: "Member", photo: "/commitee-images/ladies-wing/yogini.jpeg"},
+  {name: "Geeta M Acharya", role: "Member", photo: "/commitee-images/ladies-wing/geeta.jpeg"},
 ];
 
 const yuvaMembers = [
@@ -57,37 +66,65 @@ export default function CommitteePage() {
         </p>
       </div>
 
-      <div className="grid gap-8 md:grid-cols-2">
-        {committees.map((committee) => (
-          <div
-            key={committee.name}
-            className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm"
-          >
-            <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-kva-text">
-              <span className="h-1 w-6 rounded-full bg-primary" />
-              {committee.name}
-            </h2>
-            <div className="space-y-3">
-              {committee.members.map((member, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-4 rounded-xl bg-gray-50 p-4 transition-colors hover:bg-primary/5"
-                >
-                  <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-dark text-sm font-bold text-white">
-                    {member.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
-                  </div>
-                  <div>
-                    <p className="font-medium text-kva-text">{member.name}</p>
-                    <p className="text-xs text-primary-dark">{member.role}</p>
-                  </div>
-                </div>
-              ))}
+      {/* Managing Committee */}
+      <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+        <h2 className="mb-6 flex items-center gap-2 text-lg font-bold text-kva-text">
+          <span className="h-1 w-6 rounded-full bg-primary" />
+          Managing Committee
+        </h2>
+        <div className="grid grid-cols-3 gap-5 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
+          {managingCommitteeMembers.map((member, index) => (
+            <div key={index} className="group flex flex-col items-center gap-2">
+              <div className="relative h-20 w-20 overflow-hidden rounded-full border-2 border-primary/20 transition-all group-hover:border-primary group-hover:shadow-md">
+                <Image
+                  src={member.photo}
+                  alt={member.name}
+                  fill
+                  className="object-cover object-top transition-transform duration-300 group-hover:scale-110"
+                />
+              </div>
+              <div className="text-center">
+                <p className="text-xs font-medium text-kva-text">{member.name}</p>
+                <p className="text-[10px] text-primary-dark">{member.role}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
-      {/* Yuva Vibhaga — full-width with member photos */}
+      {/* Mahila Vibhaga */}
+      <div className="mt-8 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+        <h2 className="mb-6 flex items-center gap-2 text-lg font-bold text-kva-text">
+          <span className="h-1 w-6 rounded-full bg-primary" />
+          Mahila Vibhaga
+        </h2>
+        <div className="grid grid-cols-3 gap-5 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
+          {mahilaVibhagaMembers.map((member, index) => (
+            <div key={index} className="group flex flex-col items-center gap-2">
+              <div className="relative flex h-20 w-20 flex-shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-primary/20 bg-gradient-to-br from-primary/20 to-primary/10 transition-all group-hover:border-primary group-hover:shadow-md">
+                {member.photo ? (
+                  <Image
+                    src={member.photo}
+                    alt={member.name}
+                    fill
+                    className="object-cover object-top transition-transform duration-300 group-hover:scale-110"
+                  />
+                ) : (
+                  <span className="text-xl font-bold text-primary-dark">
+                    {member.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
+                  </span>
+                )}
+              </div>
+              <div className="text-center">
+                <p className="text-xs font-medium text-kva-text">{member.name}</p>
+                <p className="text-[10px] text-primary-dark">{member.role}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Yuva Vibhaga */}
       <div className="mt-8 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
         <h2 className="mb-6 flex items-center gap-2 text-lg font-bold text-kva-text">
           <span className="h-1 w-6 rounded-full bg-primary" />
@@ -101,7 +138,7 @@ export default function CommitteePage() {
                   src={member.photo}
                   alt={member.name}
                   fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-110"
+                  className="object-cover object-top transition-transform duration-300 group-hover:scale-110"
                 />
               </div>
               <div className="text-center">

@@ -138,13 +138,13 @@ export default function Home() {
               href={feature.href}
               className="group rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
             >
-              <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${feature.color} text-2xl shadow-sm`}>
+              <div className={`mb-4 flex h-12 w-12 items-center justify-center justify-self-center rounded-xl bg-gradient-to-br ${feature.color} text-2xl shadow-sm`}>
                 {feature.icon}
               </div>
-              <h3 className="text-lg font-semibold text-kva-text group-hover:text-primary-dark">
+              <h3 className="text-lg font-semibold text-kva-text group-hover:text-primary-dark text-center">
                 {feature.title}
               </h3>
-              <p className="mt-1 text-sm text-kva-text-light">{feature.description}</p>
+              <p className="mt-1 text-sm text-kva-text-light text-center">{feature.description}</p>
             </Link>
           ))}
         </div>
