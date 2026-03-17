@@ -159,7 +159,7 @@ export default function Home() {
                 About <span className="text-primary">KVA Mumbai</span>
               </h2>
               <p className="mt-4 leading-relaxed text-kva-text-light">
-                Karnataka Vishwakarma Association (KVA), Mumbai, was established in the year 1945
+                The Karnataka Vishwakarma Association (KVA), Mumbai, was established in the year 1945
                 with an objective to preserve tradition and serve society in the area of education,
                 medical, social &amp; cultural aspects, encourage young generation to improve their
                 skills, support sports activities, empower women and girls.
@@ -201,7 +201,7 @@ export default function Home() {
         <div className="mx-auto max-w-3xl px-4 text-center">
           <h2 className="text-2xl font-bold text-white md:text-3xl">Join Our Community</h2>
           <p className="mt-3 text-white/80">
-            Stay connected with the Vishwakarma community. Get updates on events,
+            Stay connected with the KVA community. Get updates on events,
             access Samvadi, and be part of our growing family.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">

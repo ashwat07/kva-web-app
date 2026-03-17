@@ -5,7 +5,7 @@ export const metadata: Metadata = {
 };
 
 const milestones = [
-  { year: "1945", title: "Foundation", description: "Karnataka Vishwakarma Association was established in Mumbai with the vision to unite and uplift the community." },
+  { year: "1945", title: "Foundation", description: "The Karnataka Vishwakarma Association was established in Mumbai with the vision to unite and uplift the community." },
   { year: "1962", title: "Growing Community", description: "KVA gained significant membership and started organizing regular cultural and religious events." },
   { year: "1968", title: "Charitable Trust Registration", description: "KVA was officially registered as a charitable trust, expanding its scope to education and social welfare." },
   { year: "1980s", title: "Education Focus", description: "Launched scholarship programs and educational aid initiatives for deserving students from the community." },
@@ -23,14 +23,14 @@ export default function HistoryPage() {
           Our <span className="text-primary">History</span>
         </h1>
         <p className="mt-2 text-kva-text-light">
-          Over 75 years of community service and cultural preservation
+          Over 80 years of community service and cultural preservation
         </p>
       </div>
 
       {/* About */}
       <div className="mb-12 rounded-2xl bg-gradient-to-r from-primary/5 to-primary/10 p-8">
         <p className="leading-relaxed text-kva-text">
-          Karnataka Vishwakarma Association (KVA), Mumbai, was established in the year 1945
+          The Karnataka Vishwakarma Association (KVA), Mumbai, was established in the year 1945
           with an objective to preserve tradition and serve society in the area of education,
           medical, social &amp; cultural aspects, encourage young generation to improve their
           skills, support sports activities, empower women and girls. The association was

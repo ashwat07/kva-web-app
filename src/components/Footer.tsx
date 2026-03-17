@@ -11,7 +11,7 @@ export default function Footer() {
             <div className="mb-4 flex items-center gap-3">
               <Image src="/kva-logo.png" alt="KVA Logo" width={48} height={48} className="rounded-full" />
               <div>
-                <p className="font-bold">Karnataka Vishwakarma</p>
+                <p className="font-bold">The Karnataka Vishwakarma</p>
                 <p className="text-sm text-white/70">Association (Regd.), Mumbai</p>
               </div>
             </div>
