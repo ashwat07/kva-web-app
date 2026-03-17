@@ -5,6 +5,7 @@ import SplashScreen from "./SplashScreen";
 import Header from "./Header";
 import Footer from "./Footer";
 import BottomNav from "./BottomNav";
+import InstallPrompt from "./InstallPrompt";
 import NotificationManager, { checkUpcomingEvents } from "./NotificationManager";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
@@ -29,6 +30,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         <main className="min-h-screen pb-20 md:pb-0">{children}</main>
         <Footer />
         <BottomNav />
+        <InstallPrompt />
         <NotificationManager />
       </div>
     </>

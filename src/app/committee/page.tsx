@@ -17,27 +17,20 @@ const committees = [
     ],
   },
   {
-    name: "Education & Social Welfare",
-    members: [
-      { role: "Chairperson", name: "To be updated" },
-      { role: "Secretary", name: "To be updated" },
-      { role: "Member", name: "To be updated" },
-    ],
-  },
-  {
     name: "Mahila Vibhaga",
     members: [
       { role: "Chairperson", name: "To be updated" },
-      { role: "Secretary", name: "To be updated" },
-      { role: "Joint Secretary", name: "To be updated" },
+      { role: "Vice Chairperson", name: "To be updated" },
+      { role: "Joint Convenor", name: "To be updated" },
+      { role: "Convenor", name: "To be updated" },
     ],
   },
 ];
 
 const yuvaMembers = [
   { name: "Sandesh J Acharya", role: "Chairperson", photo: "/commitee-images/youth-wing/IMG_20251206_131047.jpg"},
-  { name: "Ashwath S Acharya", role: "Vice-Chairperson", photo2: "/commitee-images/youth-wing/IMG_3718.JPG", photo: "/commitee-images/youth-wing/IMG_20251228_160723.jpg" },
-  { name: "Siddhesh D Acharya", role: "Jt-Convenor", photo: "/commitee-images/youth-wing/IMG_20251223_141526.jpg" },
+  { name: "Ashwath S Acharya", role: "Vice-Chairperson", photo: "/commitee-images/youth-wing/ashwat.jpeg", photo2: "/commitee-images/youth-wing/IMG_20251228_160723.jpg" },
+  { name: "Siddhesh D Acharya", role: "Joint-Convenor", photo: "/commitee-images/youth-wing/IMG_20251223_141526.jpg" },
   { name: "Pranav Acharya", role: "Convenor", photo: "/commitee-images/youth-wing/IMG20260314125209.jpg" },
   { name: "Sagar B Acharya", role: "Member", photo: "/commitee-images/youth-wing/IMG-20251224-WA0045.jpg" },
   { name: "Rhea S Acharya", role: "Member", photo: "/commitee-images/youth-wing/IMG-20251224-WA0028.jpg" },

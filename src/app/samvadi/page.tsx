@@ -12,7 +12,7 @@ export default function SamvadiPage() {
         <span className="text-primary">Samvadi</span>
       </h1>
       <p className="mt-2 text-kva-text-light">
-        Community members directory — connect with fellow members
+        Community members directory, connect with fellow members
       </p>
       <p className="mt-8 text-lg font-medium text-primary-dark">Coming soon</p>
     </div>

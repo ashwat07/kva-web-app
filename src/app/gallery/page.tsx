@@ -479,7 +479,13 @@ export default function GalleryPage() {
   }, []);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12">
+    <div
+      className="mx-auto max-w-6xl py-12"
+      style={{
+        paddingLeft: "max(1rem, env(safe-area-inset-left))",
+        paddingRight: "max(1rem, env(safe-area-inset-right))",
+      }}
+    >
       <div className="mb-10">
         <h1 className="text-3xl font-bold text-kva-text">
           Photo <span className="text-primary">Gallery</span>
@@ -511,10 +517,10 @@ export default function GalleryPage() {
 
       {openAlbum ? (
         <>
-          <div className="mb-6 flex items-center gap-3">
+          <div className="mb-6 flex min-w-0 flex-wrap items-center gap-2 gap-y-1 sm:gap-3">
             <button
               onClick={() => setOpenAlbum(null)}
-              className="flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium text-kva-text-light transition-colors hover:bg-gray-100"
+              className="flex flex-shrink-0 items-center gap-1 rounded-lg px-2 py-1.5 text-sm font-medium text-kva-text-light transition-colors hover:bg-gray-100 sm:px-3 sm:py-2"
             >
               <svg
                 className="h-5 w-5"
@@ -529,12 +535,12 @@ export default function GalleryPage() {
                   d="M15 19l-7-7 7-7"
                 />
               </svg>
-              Back
+              <span className="hidden sm:inline">Back</span>
             </button>
-            <h2 className="text-xl font-bold text-kva-text">
+            <h2 className="min-w-0 flex-1 text-sm font-bold leading-tight text-kva-text break-words sm:text-xl">
               {openAlbum.icon} {openAlbum.title}
             </h2>
-            <span className="rounded-full bg-primary/10 px-3 py-0.5 text-sm font-medium text-primary-dark">
+            <span className="flex-shrink-0 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary-dark sm:px-3 sm:text-sm">
               {openAlbum.images.length} photos
             </span>
           </div>
