@@ -15,6 +15,8 @@ const milestones = [
   { year: "2020s", title: "Modern Era", description: "Embracing technology with the KVA app, online events, and expanded community reach across Mumbai with ~1,200 active members." },
 ];
 
+const yearDiff = new Date().getFullYear() - new Date("1945").getFullYear();
+
 export default function HistoryPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-12">
@@ -23,7 +25,7 @@ export default function HistoryPage() {
           Our <span className="text-primary">History</span>
         </h1>
         <p className="mt-2 text-kva-text-light">
-          Over 80 years of community service and cultural preservation
+          Over {yearDiff} years of community service and cultural preservation
         </p>
       </div>
 

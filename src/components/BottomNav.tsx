@@ -16,9 +16,13 @@ export default function BottomNav() {
   return (
     <nav
       className="fixed bottom-0 left-0 right-0 z-40 border-t border-gray-200 bg-white/95 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] backdrop-blur-md md:hidden"
-      style={{ paddingBottom: "env(safe-area-inset-bottom, 0)" }}
+      style={{
+        paddingBottom: "env(safe-area-inset-bottom, 0px)",
+        paddingLeft: "max(0.5rem, env(safe-area-inset-left, 0px))",
+        paddingRight: "max(0.5rem, env(safe-area-inset-right, 0px))",
+      }}
     >
-      <div className="mx-auto flex max-w-lg items-center justify-around">
+      <div className="mx-auto flex w-full max-w-lg items-center justify-around">
         {items.map((item) => {
           const isActive = pathname === item.href;
           return (

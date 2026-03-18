@@ -57,11 +57,13 @@ const annualEvents = [
   "Monthly & Annual Bhajan Sessions",
 ];
 
+const yearDiff = new Date().getFullYear() - new Date("1945").getFullYear();
+
 export default function Home() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#1a0a00] via-[#2d1200] to-[#3d1a00]">
+      <section className="relative overflow-x-clip overflow-y-visible bg-gradient-to-b from-[#1a0a00] via-[#2d1200] to-[#3d1a00]">
         <div
           className="absolute inset-0 opacity-[0.04]"
           style={{
@@ -70,20 +72,27 @@ export default function Home() {
             backgroundSize: "32px 32px",
           }}
         />
-        <div className="absolute -left-40 -top-40 h-96 w-96 rounded-full bg-primary/20 blur-3xl" />
-        <div className="absolute -bottom-32 -right-32 h-80 w-80 rounded-full bg-secondary/20 blur-3xl" />
+        <div className="absolute -left-32 -top-40 h-80 w-80 rounded-full bg-primary/20 blur-3xl sm:-left-40 sm:h-96 sm:w-96" />
+        <div className="absolute -bottom-20 -right-20 h-64 w-64 rounded-full bg-secondary/20 blur-3xl sm:-bottom-32 sm:-right-32 sm:h-80 sm:w-80" />
 
-        <div className="relative mx-auto max-w-5xl px-4 py-16 md:py-24">
+        <div
+          className="relative mx-auto max-w-5xl py-16 md:py-24"
+          style={{
+            paddingLeft: "max(1rem, env(safe-area-inset-left, 0px))",
+            paddingRight: "max(1rem, env(safe-area-inset-right, 0px))",
+          }}
+        >
           <div className="flex flex-col items-center text-center">
-            <div className="mb-6 rounded-full border border-white/10 bg-white/5 p-3 backdrop-blur-sm">
-              <Image
-                src="/kva-logo.png"
-                alt="KVA Logo"
-                width={100}
-                height={100}
-                className="drop-shadow-xl"
-                priority
-              />
+            <div className="mb-6 rounded-full border border-white/10 bg-white/5 p-6 backdrop-blur-sm md:p-8">
+              <div className="relative h-36 w-36 md:h-40 md:w-40">
+                <Image
+                  src="/kva-logo.png"
+                  alt="KVA Logo"
+                  fill
+                  className="object-contain drop-shadow-xl"
+                  priority
+                />
+              </div>
             </div>
 
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-primary-light/80">
@@ -95,7 +104,7 @@ export default function Home() {
             </h1>
 
             <p className="mt-2 text-sm font-medium tracking-wide text-white/50 md:text-base">
-              Serving the community for over 80 years
+              Serving the community for over {yearDiff} years
             </p>
 
             <div className="mx-auto mt-6 h-px w-24 bg-gradient-to-r from-transparent via-primary to-transparent" />
@@ -124,7 +133,13 @@ export default function Home() {
       </section>
 
       {/* Features Grid */}
-      <section className="mx-auto max-w-7xl px-4 py-16">
+      <section
+        className="mx-auto max-w-7xl py-16"
+        style={{
+          paddingLeft: "max(1rem, env(safe-area-inset-left, 0px))",
+          paddingRight: "max(1rem, env(safe-area-inset-right, 0px))",
+        }}
+      >
         <div className="mb-10 text-center">
           <h2 className="text-2xl font-bold text-kva-text md:text-3xl">
             Explore <span className="text-primary">KVA</span>
@@ -152,7 +167,13 @@ export default function Home() {
 
       {/* About Section */}
       <section className="bg-kva-bg-alt">
-        <div className="mx-auto max-w-7xl px-4 py-16">
+        <div
+          className="mx-auto max-w-7xl py-16"
+          style={{
+            paddingLeft: "max(1rem, env(safe-area-inset-left, 0px))",
+            paddingRight: "max(1rem, env(safe-area-inset-right, 0px))",
+          }}
+        >
           <div className="grid gap-10 md:grid-cols-2">
             <div>
               <h2 className="text-2xl font-bold text-kva-text md:text-3xl">
@@ -197,8 +218,14 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="bg-gradient-to-r from-primary to-primary-dark py-16">
-        <div className="mx-auto max-w-3xl px-4 text-center">
+      <section className="bg-gradient-to-r from-primary to-primary-dark py-16 pb-[max(4rem,calc(2rem+env(safe-area-inset-bottom,0px)))] md:pb-16">
+        <div
+          className="mx-auto max-w-3xl text-center"
+          style={{
+            paddingLeft: "max(1.25rem, env(safe-area-inset-left, 0px))",
+            paddingRight: "max(1.25rem, env(safe-area-inset-right, 0px))",
+          }}
+        >
           <h2 className="text-2xl font-bold text-white md:text-3xl">Join Our Community</h2>
           <p className="mt-3 text-white/80">
             Stay connected with the KVA community. Get updates on events,

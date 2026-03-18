@@ -1,21 +1,41 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
 import Image from "next/image";
 import galleryManifest from "@/data/gallery-manifest.json";
+import anniversary80Gallery from "@/data/80th-anniversary-gallery.json";
 
 const BATCH_SIZE = 16;
 
 const manifest = galleryManifest as Record<string, { w: number; h: number }>;
 
 function getThumbSrc(src: string): string {
-  const lastSlash = src.lastIndexOf("/");
-  if (lastSlash === -1) return src;
-  const dir = src.substring(0, lastSlash);
-  const file = src.substring(lastSlash + 1);
-  const ext = file.lastIndexOf(".");
-  const name = ext !== -1 ? file.substring(0, ext) : file;
-  return `${dir}/thumbs/${name}.jpg`;
+  const prefix = "/gallery/";
+  if (!src.startsWith(prefix)) return src;
+  const rest = src.slice(prefix.length);
+  const parts = rest.split("/").filter(Boolean);
+  if (parts.length < 2) return src;
+  const albumDir = parts[0];
+  if (parts.length === 2) {
+    const file = parts[1];
+    const dot = file.lastIndexOf(".");
+    const name = dot !== -1 ? file.slice(0, dot) : file;
+    return `/gallery/${albumDir}/thumbs/${name}.jpg`;
+  }
+  const fileName = parts[parts.length - 1];
+  const subParts = parts.slice(1, -1);
+  const dot = fileName.lastIndexOf(".");
+  const stem = dot !== -1 ? fileName.slice(0, dot) : fileName;
+  const base =
+    subParts.length > 0 ? `${subParts.join("/")}/${stem}` : stem;
+  const thumbKey = base.replace(/\//g, "__");
+  return `/gallery/${albumDir}/thumbs/${thumbKey}.jpg`;
 }
 
 function getDimensions(src: string): { w: number; h: number } {
@@ -154,6 +174,282 @@ function distributeToColumns(
   return columns;
 }
 
+type AnniversaryGalleryData = {
+  images: string[];
+  video: string | null;
+  videoPosition: "top" | "random";
+};
+
+const anniversary80Data = anniversary80Gallery as AnniversaryGalleryData;
+
+function hashStr(s: string): number {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) {
+    h = Math.imul(31, h) + s.charCodeAt(i);
+  }
+  return Math.abs(h);
+}
+
+type MixedMasonryCell =
+  | { kind: "video"; src: string; key: string }
+  | { kind: "image"; src: string; imgIndex: number; key: string };
+
+function buildAnniversaryMasonryCells(
+  images: string[],
+  video: string | null,
+  position: "top" | "random"
+): MixedMasonryCell[] {
+  const imgCells: MixedMasonryCell[] = images.map((src, i) => ({
+    kind: "image",
+    src,
+    imgIndex: i,
+    key: `img-${i}`,
+  }));
+  if (!video) return imgCells;
+  const v: MixedMasonryCell = { kind: "video", src: video, key: "video" };
+  if (position === "top") return [v, ...imgCells];
+  const idx = hashStr(video) % (imgCells.length + 1);
+  const out = [...imgCells];
+  out.splice(idx, 0, v);
+  return out;
+}
+
+function distributeAnniversaryCells(
+  cells: MixedMasonryCell[],
+  columnCount: number
+): MixedMasonryCell[][] {
+  const columns: MixedMasonryCell[][] = Array.from(
+    { length: columnCount },
+    () => []
+  );
+  const heights = new Array(columnCount).fill(0);
+
+  cells.forEach((cell) => {
+    const { w, h } =
+      cell.kind === "video"
+        ? { w: 9, h: 16 }
+        : getDimensions(cell.src);
+    const normalizedHeight = h / w;
+    let shortest = 0;
+    for (let i = 1; i < columnCount; i++) {
+      if (heights[i] < heights[shortest]) shortest = i;
+    }
+    columns[shortest].push(cell);
+    heights[shortest] += normalizedHeight;
+  });
+
+  return columns;
+}
+
+function MasonryVideoTile({
+  src,
+  onExpand,
+}: {
+  src: string;
+  onExpand: () => void;
+}) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const encoded = encodeURI(src);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => {
+      if (mq.matches) v.pause();
+      else void v.play().catch(() => {});
+    };
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, [src]);
+
+  return (
+    <div
+      className="group cursor-pointer overflow-hidden rounded-xl ring-2 ring-amber-500/50 shadow-md transition-shadow hover:ring-amber-400"
+      onClick={onExpand}
+    >
+      <div
+        className="relative overflow-hidden rounded-xl bg-black"
+        style={{ aspectRatio: "9/16" }}
+      >
+        <video
+          ref={videoRef}
+          className="absolute inset-0 h-full w-full object-cover"
+          src={encoded}
+          muted
+          loop
+          playsInline
+          autoPlay
+          preload="metadata"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+        <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between gap-2">
+          <span className="rounded-md bg-black/55 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-200">
+            Video
+          </span>
+          <span className="rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-medium text-kva-text">
+            Tap to expand
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function VideoExpandModal({
+  src,
+  onClose,
+}: {
+  src: string;
+  onClose: () => void;
+}) {
+  const encoded = encodeURI(src);
+
+  useEffect(() => {
+    const h = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", h);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", h);
+    };
+  }, [onClose]);
+
+  return (
+    <div
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/95 p-4"
+      onClick={onClose}
+    >
+      <button
+        type="button"
+        className="absolute right-4 top-4 z-10 rounded-full bg-white/15 p-2 text-white backdrop-blur-sm hover:bg-white/25"
+        onClick={onClose}
+        aria-label="Close"
+      >
+        <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+      <video
+        className="max-h-[90dvh] max-w-full rounded-lg"
+        src={encoded}
+        controls
+        playsInline
+        autoPlay
+        onClick={(e) => e.stopPropagation()}
+      />
+    </div>
+  );
+}
+
+function AnniversaryMixedGrid({
+  images,
+  video,
+  videoPosition,
+  onImageClick,
+  onVideoExpand,
+}: {
+  images: string[];
+  video: string | null;
+  videoPosition: "top" | "random";
+  onImageClick: (imageIndex: number) => void;
+  onVideoExpand: () => void;
+}) {
+  const allCells = useMemo(
+    () => buildAnniversaryMasonryCells(images, video, videoPosition),
+    [images, video, videoPosition]
+  );
+  const [visibleCount, setVisibleCount] = useState(BATCH_SIZE);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const columnCount = useColumnCount();
+  const hasMore = visibleCount < allCells.length;
+
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el || !hasMore) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisibleCount((prev) =>
+            Math.min(prev + BATCH_SIZE, allCells.length)
+          );
+        }
+      },
+      { rootMargin: "600px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasMore, allCells.length, visibleCount]);
+
+  useEffect(() => {
+    setVisibleCount(BATCH_SIZE);
+  }, [images, video, videoPosition]);
+
+  const visibleCells = allCells.slice(0, visibleCount);
+  const columns = distributeAnniversaryCells(visibleCells, columnCount);
+
+  if (allCells.length === 0) {
+    return (
+      <div className="rounded-2xl border border-dashed border-primary/30 bg-kva-bg-alt/80 py-16 text-center">
+        <p className="text-kva-text-light">
+          Add photos or video to{" "}
+          <code className="rounded bg-gray-100 px-1 text-sm">
+            public/gallery/80th-anniversary-2026/
+          </code>{" "}
+          and run{" "}
+          <code className="rounded bg-gray-100 px-1 text-sm">
+            npm run generate-thumbs
+          </code>
+          .
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div className="flex gap-3">
+        {columns.map((col, colIdx) => (
+          <div key={colIdx} className="flex flex-1 flex-col gap-3">
+            {col.map((cell) =>
+              cell.kind === "video" ? (
+                <MasonryVideoTile
+                  key={cell.key}
+                  src={cell.src}
+                  onExpand={onVideoExpand}
+                />
+              ) : (
+                <GalleryImage
+                  key={cell.key}
+                  src={cell.src}
+                  alt={`80th Anniversary — photo ${cell.imgIndex + 1}`}
+                  onClick={() => onImageClick(cell.imgIndex)}
+                />
+              )
+            )}
+          </div>
+        ))}
+      </div>
+      {hasMore && (
+        <div ref={sentinelRef} className="flex justify-center py-8">
+          <button
+            type="button"
+            onClick={() =>
+              setVisibleCount((prev) =>
+                Math.min(prev + BATCH_SIZE, allCells.length)
+              )
+            }
+            className="flex items-center gap-2 rounded-full bg-primary/10 px-6 py-2.5 text-sm font-medium text-primary-dark transition-colors hover:bg-primary/20"
+          >
+            Load more ({allCells.length - visibleCount} remaining)
+          </button>
+        </div>
+      )}
+    </>
+  );
+}
+
 function AlbumGrid({
   album,
   onImageClick,
@@ -190,6 +486,22 @@ function AlbumGrid({
 
   const visibleImages = album.images.slice(0, visibleCount);
   const columns = distributeToColumns(visibleImages, columnCount);
+
+  if (album.images.length === 0) {
+    return (
+      <div className="rounded-2xl border border-dashed border-primary/30 bg-kva-bg-alt/80 py-16 text-center">
+        <p className="text-kva-text-light">
+          Photos from this celebration will appear here soon.
+        </p>
+        <p className="mt-2 text-sm text-kva-text-light">
+          Share images at{" "}
+          <span className="font-semibold text-primary-dark">
+            kvamumbai1962@gmail.com
+          </span>
+        </p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -452,6 +764,17 @@ const outdoorGames2324Images = [
   "/gallery/outdoor-games-2023-24/screenshot_2024-01-10-20-27-44-05_a23b203fd3aafc6dcb84e438dda678b6.jpg",
 ];
 
+const ANNIVERSARY_80_TITLE = "80th Anniversary Celebration";
+const ANNIVERSARY_LOGO = "/gallery/80th-anniversary-2026/80th-anniversary-logo.png";
+
+const anniversary80Album: GalleryAlbum = {
+  year: "Milestone",
+  title: ANNIVERSARY_80_TITLE,
+  icon: "✨",
+  cover: ANNIVERSARY_LOGO,
+  images: anniversary80Data.images,
+};
+
 const albums: GalleryAlbum[] = [
   {
     year: "2023-24",
@@ -460,27 +783,41 @@ const albums: GalleryAlbum[] = [
     cover: "/gallery/outdoor-games-2023-24/kva-outdoor-games-23-24.png",
     images: outdoorGames2324Images,
   },
-  
 ];
+
+function isAnniversary80Album(album: GalleryAlbum | null): boolean {
+  return album?.title === ANNIVERSARY_80_TITLE;
+}
+
+type LightboxState = { images: string[]; index: number };
 
 export default function GalleryPage() {
   const [selectedYear, setSelectedYear] = useState("2023-24");
   const [openAlbum, setOpenAlbum] = useState<GalleryAlbum | null>(null);
-  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [lightbox, setLightbox] = useState<LightboxState | null>(null);
+  const [videoModalSrc, setVideoModalSrc] = useState<string | null>(null);
 
   const filtered = albums.filter((a) => a.year === selectedYear);
 
+  const anniversaryMediaCount =
+    anniversary80Data.images.length + (anniversary80Data.video ? 1 : 0);
+
+  useEffect(() => {
+    setLightbox(null);
+    setVideoModalSrc(null);
+  }, [openAlbum]);
+
   const handleLightboxNavigate = useCallback((index: number) => {
-    setLightboxIndex(index);
+    setLightbox((prev) => (prev ? { ...prev, index } : null));
   }, []);
 
   const handleLightboxClose = useCallback(() => {
-    setLightboxIndex(null);
+    setLightbox(null);
   }, []);
 
   return (
     <div
-      className="mx-auto max-w-6xl py-12"
+      className="mx-auto max-w-6xl overflow-x-hidden py-12"
       style={{
         paddingLeft: "max(1rem, env(safe-area-inset-left))",
         paddingRight: "max(1rem, env(safe-area-inset-right))",
@@ -494,6 +831,82 @@ export default function GalleryPage() {
           Memories from KVA events and celebrations
         </p>
       </div>
+
+      {/* Milestone: 80th Anniversary — featured above year-wise albums */}
+      {!openAlbum && (
+        <button
+          type="button"
+          onClick={() => setOpenAlbum(anniversary80Album)}
+          className="group relative mb-10 w-full overflow-hidden rounded-3xl border border-amber-600/25 bg-gradient-to-br from-amber-950 via-[#4a0a0a] to-black text-left shadow-xl transition-all hover:border-amber-500/40 hover:shadow-2xl hover:shadow-amber-900/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2"
+        >
+          <div
+            className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-amber-500/10 blur-3xl"
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-red-600/15 blur-2xl"
+            aria-hidden
+          />
+          <span
+            className="pointer-events-none absolute right-6 top-1/2 -translate-y-1/2 select-none font-serif text-[8rem] font-bold leading-none text-white/[0.04] transition-colors group-hover:text-amber-100/[0.07] sm:text-[10rem] md:right-10"
+            aria-hidden
+          >
+            80
+          </span>
+          <div className="relative flex flex-col items-stretch gap-6 p-6 sm:flex-row sm:items-center sm:gap-8 sm:p-8 md:p-10">
+            <div className="relative mx-auto flex-shrink-0 sm:mx-0">
+              <div className="absolute inset-0 scale-110 rounded-full bg-amber-400/20 blur-2xl" />
+              <div className="relative rounded-full bg-black/50 p-3 ring-2 ring-amber-500/40 ring-offset-4 ring-offset-amber-950/50 transition-transform duration-500 group-hover:scale-[1.02]">
+                <Image
+                  src={ANNIVERSARY_LOGO}
+                  alt="KVA 80th Anniversary emblem"
+                  width={200}
+                  height={200}
+                  className="h-40 w-40 rounded-full object-contain sm:h-44 sm:w-44 md:h-52 md:w-52"
+                  priority
+                />
+              </div>
+            </div>
+            <div className="min-w-0 flex-1 text-center sm:text-left">
+              <span className="inline-block rounded-full border border-amber-400/40 bg-amber-500/15 px-3 py-0.5 text-xs font-semibold uppercase tracking-widest text-amber-200">
+                Once in a lifetime
+              </span>
+              <h2 className="mt-3 font-serif text-2xl font-bold tracking-tight text-amber-50 sm:text-3xl md:text-4xl">
+                80th Anniversary Celebration
+              </h2>
+              <p className="mt-2 text-sm text-amber-100/75 sm:text-base">
+                The Karnataka Vishwakarma Association (Regd.), Mumbai
+              </p>
+              <p className="mt-1 font-medium text-amber-300">
+                4 January 2026 · Mumbai
+              </p>
+              {anniversaryMediaCount > 0 && (
+                <p className="mt-2 text-xs text-amber-200/80">
+                  {anniversary80Data.images.length} photo
+                  {anniversary80Data.images.length === 1 ? "" : "s"}
+                  {anniversary80Data.video ? " · celebration video in gallery" : ""}
+                </p>
+              )}
+              <span className="mt-4 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 px-5 py-2.5 text-sm font-semibold text-amber-950 shadow-lg transition-transform group-hover:translate-x-0.5">
+                View celebration gallery
+                <svg
+                  className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </span>
+            </div>
+          </div>
+        </button>
+      )}
 
       {/* Year Tabs */}
       <div className="mb-8 flex flex-wrap gap-2">
@@ -541,21 +954,54 @@ export default function GalleryPage() {
               {openAlbum.icon} {openAlbum.title}
             </h2>
             <span className="flex-shrink-0 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary-dark sm:px-3 sm:text-sm">
-              {openAlbum.images.length} photos
+              {isAnniversary80Album(openAlbum)
+                ? anniversaryMediaCount > 0
+                  ? `${anniversaryMediaCount} in gallery`
+                  : "Gallery"
+                : openAlbum.images.length > 0
+                  ? `${openAlbum.images.length} photos`
+                  : "Gallery"}
             </span>
           </div>
 
-          <AlbumGrid
-            album={openAlbum}
-            onImageClick={(index) => setLightboxIndex(index)}
-          />
+          {isAnniversary80Album(openAlbum) ? (
+            <AnniversaryMixedGrid
+              images={anniversary80Data.images}
+              video={anniversary80Data.video}
+              videoPosition={anniversary80Data.videoPosition}
+              onImageClick={(index) =>
+                setLightbox({
+                  images: anniversary80Data.images,
+                  index,
+                })
+              }
+              onVideoExpand={() => {
+                if (anniversary80Data.video)
+                  setVideoModalSrc(anniversary80Data.video);
+              }}
+            />
+          ) : (
+            <AlbumGrid
+              album={openAlbum}
+              onImageClick={(index) =>
+                setLightbox({ images: openAlbum.images, index })
+              }
+            />
+          )}
 
-          {lightboxIndex !== null && (
+          {lightbox !== null && (
             <Lightbox
-              images={openAlbum.images}
-              currentIndex={lightboxIndex}
+              images={lightbox.images}
+              currentIndex={lightbox.index}
               onClose={handleLightboxClose}
               onNavigate={handleLightboxNavigate}
+            />
+          )}
+
+          {videoModalSrc !== null && (
+            <VideoExpandModal
+              src={videoModalSrc}
+              onClose={() => setVideoModalSrc(null)}
             />
           )}
         </>

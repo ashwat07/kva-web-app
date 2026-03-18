@@ -34,6 +34,9 @@ const mahilaVibhagaMembers = [
   { name: "Usha S Acharya", role: "Member", photo: "/commitee-images/ladies-wing/usha-sadanand.jpeg" },
   { name: "Yogini R Acharya", role: "Member", photo: "/commitee-images/ladies-wing/yogini.jpeg" },
   { name: "Geeta M Acharya", role: "Member", photo: "/commitee-images/ladies-wing/geeta.jpeg" },
+  { name: "Chandrakala S Acharya", role: "Member", photo: "/commitee-images/ladies-wing/chandrakala.jpeg" },
+  { name: "Pramila B Acharya", role: "Member", photo: "/commitee-images/ladies-wing/pramila.jpeg" },
+  { name: "Jyoti P Acharya", role: "Member", photo: "/commitee-images/ladies-wing/jyoti-prakash.jpeg" },
 ];
 
 const yuvaMembers = [
@@ -52,6 +55,7 @@ const yuvaMembers = [
   { name: "Sahana Acharya", role: "Member", photo: "/commitee-images/youth-wing/3_20251222_194501_0002.png" },
   { name: "Bhagyashree Acharya", role: "Member", photo: "/commitee-images/youth-wing/IMG_1005.jpg" },
   { name: "Arpit Acharya", role: "Member", photo: "/commitee-images/youth-wing/0K8A0893.jpg" },
+  { name: "Shamita P Acharya", role: "Member", photo: "/commitee-images/youth-wing/shamita.png" },
   { name: "Jagadish Acharya", role: "Member", photo: "/commitee-images/youth-wing/jagadish.jpeg" },
   { name: "Aishwarya S Acharya", role: "Member", photo: "/commitee-images/youth-wing/aishwarya.jpeg" },
 ];
@@ -140,7 +144,7 @@ export default function CommitteePage() {
                   src={member.photo}
                   alt={member.name}
                   fill
-                  className="object-cover object-top transition-transform duration-300 group-hover:scale-110"
+                  className="object-cover transition-transform duration-300 group-hover:scale-110"
                 />
               </div>
               <div className="text-center">

@@ -1,4 +1,276 @@
 {
+  "/gallery/80th-anniversary-2026/80th-anniversary-logo.png": {
+    "w": 1024,
+    "h": 1024
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-01-05 at 09.47.10.jpeg": {
+    "w": 1280,
+    "h": 960
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-01-25 at 13.27.57.jpeg": {
+    "w": 1512,
+    "h": 1006
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-01-25 at 13.28.12.jpeg": {
+    "w": 1512,
+    "h": 1006
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-01-25 at 13.28.16.jpeg": {
+    "w": 656,
+    "h": 984
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-01-25 at 13.29.22.jpeg": {
+    "w": 1512,
+    "h": 1006
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-01-25 at 13.29.23 (1).jpeg": {
+    "w": 1006,
+    "h": 1512
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-01-25 at 13.29.23.jpeg": {
+    "w": 1512,
+    "h": 1006
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-01-25 at 13.38.54.jpeg": {
+    "w": 1512,
+    "h": 1006
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-01-31 at 11.33.06.jpeg": {
+    "w": 1248,
+    "h": 832
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.13.25.jpeg": {
+    "w": 1280,
+    "h": 851
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.14.11.jpeg": {
+    "w": 1280,
+    "h": 851
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.14.13.jpeg": {
+    "w": 1280,
+    "h": 851
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.14.15.jpeg": {
+    "w": 1280,
+    "h": 851
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.14.16.jpeg": {
+    "w": 1280,
+    "h": 851
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.14.26.jpeg": {
+    "w": 1280,
+    "h": 851
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.14.28.jpeg": {
+    "w": 1280,
+    "h": 851
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.14.29.jpeg": {
+    "w": 1512,
+    "h": 1006
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.14.35.jpeg": {
+    "w": 1512,
+    "h": 1006
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.14.39.jpeg": {
+    "w": 1512,
+    "h": 1006
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.14.42.jpeg": {
+    "w": 984,
+    "h": 656
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.14.48.jpeg": {
+    "w": 1512,
+    "h": 1006
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.14.51.jpeg": {
+    "w": 656,
+    "h": 984
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.14.56.jpeg": {
+    "w": 1512,
+    "h": 1006
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.14.58.jpeg": {
+    "w": 1512,
+    "h": 1006
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.15.47.jpeg": {
+    "w": 1512,
+    "h": 1006
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.15.50.jpeg": {
+    "w": 1512,
+    "h": 1006
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.15.59.jpeg": {
+    "w": 1512,
+    "h": 1006
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.08.jpeg": {
+    "w": 1512,
+    "h": 1006
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.10.jpeg": {
+    "w": 1512,
+    "h": 1006
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.12.jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.14.jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.15.jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.35 (1).jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.35.jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.36 (1).jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.36.jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.37 (1).jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.37 (2).jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.37.jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.38 (1).jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.38 (2).jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.38.jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.39 (1).jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.39 (2).jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.39.jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.40 (1).jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.40 (2).jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.40.jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.41 (1).jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.41 (2).jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.41.jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.42 (1).jpeg": {
+    "w": 1280,
+    "h": 853
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.42.jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.43 (1).jpeg": {
+    "w": 1286,
+    "h": 857
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.43 (2).jpeg": {
+    "w": 1286,
+    "h": 857
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.43.jpeg": {
+    "w": 853,
+    "h": 1280
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.44 (1).jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.44 (2).jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.44.jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.45 (1).jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.45 (2).jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.45.jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.46 (1).jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.46 (2).jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.46.jpeg": {
+    "w": 1500,
+    "h": 1000
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.47 (1).jpeg": {
+    "w": 1000,
+    "h": 1500
+  },
+  "/gallery/80th-anniversary-2026/WhatsApp Image 2026-03-18 at 16.16.47.jpeg": {
+    "w": 1280,
+    "h": 853
+  },
   "/gallery/outdoor-games-2023-24/10830628_796307163776023_3970487109183953045_o.jpg": {
     "w": 1200,
     "h": 797

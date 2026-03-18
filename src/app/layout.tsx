@@ -10,10 +10,14 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Karnataka Vishwakarma Association, Mumbai",
+  title: "The Karnataka Vishwakarma Association, Mumbai",
   description:
     "Official website of Karnataka Vishwakarma Association (Regd.), Mumbai - Established 1945. Serving the community through education, medical, social & cultural initiatives.",
   manifest: "/manifest.json",
+  icons: {
+    icon: [{ url: "/kva-logo.png", type: "image/png", sizes: "any" }],
+    apple: [{ url: "/apple-touch-icon.png", type: "image/png" }],
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -37,7 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="apple-touch-icon" href="/icon-192x192.png" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body className={`${poppins.variable} font-sans antialiased`}>
         <ClientLayout>{children}</ClientLayout>

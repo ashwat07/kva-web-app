@@ -26,11 +26,14 @@
 
 html {
   scroll-behavior: smooth;
+  min-height: 100%;
+  min-height: 100dvh;
 }
 
 body {
   background-color: var(--color-bg);
   color: var(--color-text);
+  min-height: 100dvh;
 }
 
 @keyframes fadeOut {

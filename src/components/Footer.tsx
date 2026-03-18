@@ -3,8 +3,14 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-b from-kva-text to-black pb-20 text-white md:pb-0">
-      <div className="mx-auto max-w-7xl px-4 py-12">
+    <footer className="bg-gradient-to-b from-kva-text to-black pb-[calc(5.25rem+env(safe-area-inset-bottom,0px))] text-white md:pb-0">
+      <div
+        className="mx-auto max-w-7xl py-12"
+        style={{
+          paddingLeft: "max(1rem, env(safe-area-inset-left, 0px))",
+          paddingRight: "max(1rem, env(safe-area-inset-right, 0px))",
+        }}
+      >
         <div className="grid gap-8 md:grid-cols-3">
           {/* About */}
           <div>
