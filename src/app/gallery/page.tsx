@@ -621,24 +621,60 @@ function Lightbox({
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      <button
-        className="absolute right-4 top-4 z-10 rounded-full bg-white/10 p-2 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
-        onClick={onClose}
-      >
-        <svg
-          className="h-6 w-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
+      <div className="absolute right-4 top-4 z-10 flex items-center gap-2">
+        <button
+          className="rounded-full bg-white/10 p-2 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+          onClick={async (e) => {
+            e.stopPropagation();
+            try {
+              const res = await fetch(images[currentIndex]);
+              const blob = await res.blob();
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download =
+                images[currentIndex].split("/").pop() || "photo.jpg";
+              a.click();
+              URL.revokeObjectURL(url);
+            } catch {
+              window.open(images[currentIndex], "_blank");
+            }
+          }}
+          aria-label="Download"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-      </button>
+          <svg
+            className="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3"
+            />
+          </svg>
+        </button>
+        <button
+          className="rounded-full bg-white/10 p-2 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+          onClick={onClose}
+        >
+          <svg
+            className="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
 
       {currentIndex > 0 && (
         <button
@@ -868,9 +904,6 @@ export default function GalleryPage() {
               </div>
             </div>
             <div className="min-w-0 flex-1 text-center sm:text-left">
-              <span className="inline-block rounded-full border border-amber-400/40 bg-amber-500/15 px-3 py-0.5 text-xs font-semibold uppercase tracking-widest text-amber-200">
-                Once in a lifetime
-              </span>
               <h2 className="mt-3 font-serif text-2xl font-bold tracking-tight text-amber-50 sm:text-3xl md:text-4xl">
                 80th Anniversary Celebration
               </h2>
@@ -884,7 +917,6 @@ export default function GalleryPage() {
                 <p className="mt-2 text-xs text-amber-200/80">
                   {anniversary80Data.images.length} photo
                   {anniversary80Data.images.length === 1 ? "" : "s"}
-                  {anniversary80Data.video ? " · celebration video in gallery" : ""}
                 </p>
               )}
               <span className="mt-4 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 px-5 py-2.5 text-sm font-semibold text-amber-950 shadow-lg transition-transform group-hover:translate-x-0.5">

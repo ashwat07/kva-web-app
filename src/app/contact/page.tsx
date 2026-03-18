@@ -68,7 +68,7 @@ export default function ContactPage() {
           <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
             <h3 className="mb-3 font-semibold text-kva-text">Follow Us</h3>
             <div className="flex gap-3">
-              {["Facebook", "Twitter", "LinkedIn"].map((platform) => (
+              {["Facebook", "Instagram"].map((platform) => (
                 <span
                   key={platform}
                   className="rounded-xl bg-gray-100 px-4 py-2 text-sm font-medium text-kva-text-light transition-colors hover:bg-primary/10 hover:text-primary-dark"

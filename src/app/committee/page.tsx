@@ -102,7 +102,7 @@ export default function CommitteePage() {
       <div className="mt-8 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
         <h2 className="mb-6 flex items-center gap-2 text-lg font-bold text-kva-text">
           <span className="h-1 w-6 rounded-full bg-primary" />
-          Mahila Vibhaga
+          Ladies Wing
         </h2>
         <div className="grid grid-cols-3 gap-5 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
           {mahilaVibhagaMembers.map((member, index) => (
@@ -134,7 +134,7 @@ export default function CommitteePage() {
       <div className="mt-8 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
         <h2 className="mb-6 flex items-center gap-2 text-lg font-bold text-kva-text">
           <span className="h-1 w-6 rounded-full bg-primary" />
-          Yuva Vibhaga
+          Youth Wing
         </h2>
         <div className="grid grid-cols-3 gap-5 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7">
           {yuvaMembers.map((member, index) => (

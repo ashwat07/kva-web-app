@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 
-const LINE_1 = "| Śrī Kalikamba Prasanna |";
-const LINE_2 = "| Namoḥ Viśhwakarmaṇe |";
+const LINE_1 = "| Om Śrī Kalikamba Prasanna |";
+const LINE_2 = "| Om Śrī Namoḥ Viśhwakarmaṇe |";
 
 function RevealText({
   text,
@@ -61,8 +61,8 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
   const [fadeOut, setFadeOut] = useState(false);
 
   useEffect(() => {
-    const fadeOutTimer = setTimeout(() => setFadeOut(true), 4200);
-    const finishTimer = setTimeout(() => onFinish(), 4700);
+    const fadeOutTimer = setTimeout(() => setFadeOut(true), 4400);
+    const finishTimer = setTimeout(() => onFinish(), 4900);
     return () => {
       clearTimeout(fadeOutTimer);
       clearTimeout(finishTimer);
@@ -70,7 +70,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
   }, [onFinish]);
 
   // Start both when the loading bar has finished sliding in (~0.6s), so they begin together
-  const animationStartMs = 0;
+  const animationStartMs = 100;
 
   return (
     <div
@@ -112,10 +112,10 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
         }}
       >
         <p className="font-medium tracking-wide text-white/95 drop-shadow-sm min-h-[1.5em] text-base md:text-lg">
-          <RevealText text={LINE_1} startMs={animationStartMs} charDelayMs={85} />
+          <RevealText text={LINE_1} startMs={animationStartMs} charDelayMs={60} />
         </p>
         <p className="font-medium tracking-wide text-white/95 drop-shadow-sm min-h-[1.5em] text-base md:text-lg">
-          <RevealText text={LINE_2} startMs={animationStartMs + 1850} charDelayMs={90} />
+          <RevealText text={LINE_2} startMs={animationStartMs + 2000} charDelayMs={60} />
         </p>
       </div>
 
@@ -130,7 +130,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
           <div
             className="h-full rounded-full bg-white"
             style={{
-              animation: "splash-loading 3.5s ease-in-out forwards",
+              animation: "splash-loading 4.0s ease-in-out forwards",
               animationDelay: `${animationStartMs}ms`,
             }}
           />
