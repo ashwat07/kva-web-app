@@ -8,7 +8,10 @@
     "generate-thumbs": "node scripts/generate-thumbnails.mjs",
     "prebuild": "node scripts/generate-thumbnails.mjs",
     "start": "npx serve out",
-    "lint": "eslint"
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "release": "standard-version",
+    "release:first": "standard-version --first-release"
   },
   "dependencies": {
     "@next/bundle-analyzer": "^16.1.6",
@@ -19,6 +22,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "standard-version": "^9.5.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
