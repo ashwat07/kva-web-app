@@ -23,6 +23,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # sharp has platform-specific native binaries; lockfile may have been generated on macOS
+      - name: Install sharp for Linux (CI)
+        run: npm install --os=linux --cpu=x64 sharp
+
       - name: Lint
         run: npm run lint
 
