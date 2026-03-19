@@ -60,7 +60,7 @@ function GalleryImage({
 
   useEffect(() => {
     if (imgRef.current?.complete && imgRef.current.naturalWidth > 0) {
-      setLoaded(true);
+      queueMicrotask(() => setLoaded(true));
     }
   }, []);
 
@@ -383,7 +383,7 @@ function AnniversaryMixedGrid({
   }, [hasMore, allCells.length, visibleCount]);
 
   useEffect(() => {
-    setVisibleCount(BATCH_SIZE);
+    queueMicrotask(() => setVisibleCount(BATCH_SIZE));
   }, [images, video, videoPosition]);
 
   const visibleCells = allCells.slice(0, visibleCount);
@@ -481,7 +481,7 @@ function AlbumGrid({
   }, [hasMore, album.images.length, visibleCount]);
 
   useEffect(() => {
-    setVisibleCount(BATCH_SIZE);
+    queueMicrotask(() => setVisibleCount(BATCH_SIZE));
   }, [album]);
 
   const visibleImages = album.images.slice(0, visibleCount);
@@ -572,7 +572,7 @@ function Lightbox({
   const touchStartX = useRef(0);
 
   useEffect(() => {
-    setLoaded(false);
+    queueMicrotask(() => setLoaded(false));
   }, [currentIndex]);
 
   useEffect(() => {
@@ -839,8 +839,10 @@ export default function GalleryPage() {
     anniversary80Data.images.length + (anniversary80Data.video ? 1 : 0);
 
   useEffect(() => {
-    setLightbox(null);
-    setVideoModalSrc(null);
+    queueMicrotask(() => {
+      setLightbox(null);
+      setVideoModalSrc(null);
+    });
   }, [openAlbum]);
 
   const handleLightboxNavigate = useCallback((index: number) => {
