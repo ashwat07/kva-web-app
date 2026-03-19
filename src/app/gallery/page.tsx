@@ -60,7 +60,7 @@ function GalleryImage({
 
   useEffect(() => {
     if (imgRef.current?.complete && imgRef.current.naturalWidth > 0) {
-      setLoaded(true);
+      queueMicrotask(() => setLoaded(true));
     }
   }, []);
 
@@ -383,7 +383,7 @@ function AnniversaryMixedGrid({
   }, [hasMore, allCells.length, visibleCount]);
 
   useEffect(() => {
-    setVisibleCount(BATCH_SIZE);
+    queueMicrotask(() => setVisibleCount(BATCH_SIZE));
   }, [images, video, videoPosition]);
 
   const visibleCells = allCells.slice(0, visibleCount);
@@ -481,7 +481,7 @@ function AlbumGrid({
   }, [hasMore, album.images.length, visibleCount]);
 
   useEffect(() => {
-    setVisibleCount(BATCH_SIZE);
+    queueMicrotask(() => setVisibleCount(BATCH_SIZE));
   }, [album]);
 
   const visibleImages = album.images.slice(0, visibleCount);
@@ -572,7 +572,7 @@ function Lightbox({
   const touchStartX = useRef(0);
 
   useEffect(() => {
-    setLoaded(false);
+    queueMicrotask(() => setLoaded(false));
   }, [currentIndex]);
 
   useEffect(() => {
@@ -839,8 +839,10 @@ export default function GalleryPage() {
     anniversary80Data.images.length + (anniversary80Data.video ? 1 : 0);
 
   useEffect(() => {
-    setLightbox(null);
-    setVideoModalSrc(null);
+    queueMicrotask(() => {
+      setLightbox(null);
+      setVideoModalSrc(null);
+    });
   }, [openAlbum]);
 
   const handleLightboxNavigate = useCallback((index: number) => {
@@ -891,16 +893,18 @@ export default function GalleryPage() {
           </span>
           <div className="relative flex flex-col items-stretch gap-6 p-6 sm:flex-row sm:items-center sm:gap-8 sm:p-8 md:p-10">
             <div className="relative mx-auto flex-shrink-0 sm:mx-0">
-              <div className="absolute inset-0 scale-110 rounded-full bg-amber-400/20 blur-2xl" />
-              <div className="relative rounded-full bg-black/50 p-3 ring-2 ring-amber-500/40 ring-offset-4 ring-offset-amber-950/50 transition-transform duration-500 group-hover:scale-[1.02]">
-                <Image
-                  src={ANNIVERSARY_LOGO}
-                  alt="KVA 80th Anniversary emblem"
-                  width={200}
-                  height={200}
-                  className="h-40 w-40 rounded-full object-contain sm:h-44 sm:w-44 md:h-52 md:w-52"
-                  priority
-                />
+              <div className="absolute inset-0 scale-110 rounded-2xl bg-amber-400/20 blur-2xl" />
+              <div className="relative overflow-visible rounded-2xl bg-black/50 p-4 ring-2 ring-amber-500/40 ring-offset-4 ring-offset-amber-950/50 transition-transform duration-500 group-hover:scale-[1.02]">
+                <div className="relative h-44 w-44 sm:h-48 sm:w-48 md:h-56 md:w-56">
+                  <Image
+                    src={ANNIVERSARY_LOGO}
+                    alt="KVA 80th Anniversary emblem"
+                    fill
+                    className="object-contain"
+                    sizes="(max-width: 640px) 176px, (max-width: 768px) 192px, 224px"
+                    priority
+                  />
+                </div>
               </div>
             </div>
             <div className="min-w-0 flex-1 text-center sm:text-left">

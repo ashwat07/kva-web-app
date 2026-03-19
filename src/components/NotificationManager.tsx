@@ -3,13 +3,10 @@
 import { useState, useEffect } from "react";
 
 export default function NotificationManager() {
-  const [permission, setPermission] = useState<NotificationPermission>("default");
   const [showBanner, setShowBanner] = useState(false);
 
   useEffect(() => {
     if (!("Notification" in window)) return;
-
-    setPermission(Notification.permission);
 
     // Show banner if permission not yet granted and not dismissed
     if (
@@ -25,7 +22,6 @@ export default function NotificationManager() {
     if (!("Notification" in window)) return;
 
     const result = await Notification.requestPermission();
-    setPermission(result);
     setShowBanner(false);
 
     if (result === "granted") {

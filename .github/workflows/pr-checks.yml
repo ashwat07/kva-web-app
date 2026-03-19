@@ -23,6 +23,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Native binaries (sharp, tailwindcss, lightningcss) are platform-specific;
+      # lockfile generated on macOS may lack the Linux variants.
+      - name: Install platform-specific binaries for Linux (CI)
+        run: npm install --os=linux --cpu=x64 sharp @tailwindcss/oxide lightningcss
+
       - name: Lint
         run: npm run lint
 

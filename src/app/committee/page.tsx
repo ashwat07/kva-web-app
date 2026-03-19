@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { ShuffledWingSection } from "./ShuffledWingSection";
 
 export const metadata: Metadata = {
   title: "Committee | Karnataka Vishwakarma Association",
@@ -98,63 +99,25 @@ export default function CommitteePage() {
         </div>
       </div>
 
-      {/* Mahila Vibhaga */}
-      <div className="mt-8 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-        <h2 className="mb-6 flex items-center gap-2 text-lg font-bold text-kva-text">
-          <span className="h-1 w-6 rounded-full bg-primary" />
-          Ladies Wing
-        </h2>
-        <div className="grid grid-cols-3 gap-5 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
-          {mahilaVibhagaMembers.map((member, index) => (
-            <div key={index} className="group flex flex-col items-center gap-2">
-              <div className="relative flex h-20 w-20 flex-shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-primary/20 bg-gradient-to-br from-primary/20 to-primary/10 transition-all group-hover:border-primary group-hover:shadow-md">
-                {member.photo ? (
-                  <Image
-                    src={member.photo}
-                    alt={member.name}
-                    fill
-                    className="object-cover object-top transition-transform duration-300 group-hover:scale-110"
-                  />
-                ) : (
-                  <span className="text-xl font-bold text-primary-dark">
-                    {member.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
-                  </span>
-                )}
-              </div>
-              <div className="text-center">
-                <p className="text-xs font-medium text-kva-text">{member.name}</p>
-                <p className="text-[10px] text-primary-dark">{member.role}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Mahila Vibhaga – members shuffled so everyone gets a turn at the top */}
+      <ShuffledWingSection
+        members={mahilaVibhagaMembers}
+        variant="ladies"
+        title="Ladies Wing"
+        logoSrc="/committee-logos/mahila-vibhaga.png"
+        logoAlt=""
+        columnsClass="grid-cols-3 gap-5 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6"
+      />
 
-      {/* Yuva Vibhaga */}
-      <div className="mt-8 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-        <h2 className="mb-6 flex items-center gap-2 text-lg font-bold text-kva-text">
-          <span className="h-1 w-6 rounded-full bg-primary" />
-          Youth Wing
-        </h2>
-        <div className="grid grid-cols-3 gap-5 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7">
-          {yuvaMembers.map((member, index) => (
-            <div key={index} className="group flex flex-col items-center gap-2">
-              <div className="relative h-20 w-20 overflow-hidden rounded-full border-2 border-primary/20 transition-all group-hover:border-primary group-hover:shadow-md">
-                <Image
-                  src={member.photo}
-                  alt={member.name}
-                  fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-110"
-                />
-              </div>
-              <div className="text-center">
-                <p className="text-xs font-medium text-kva-text">{member.name}</p>
-                <p className="text-[10px] text-primary-dark">{member.role}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Yuva Vibhaga – members shuffled so everyone gets a turn at the top */}
+      <ShuffledWingSection
+        members={yuvaMembers}
+        variant="youth"
+        title="Youth Wing"
+        logoSrc="/committee-logos/youth-wing-light.png"
+        logoAlt=""
+        columnsClass="grid-cols-3 gap-5 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7"
+      />
 
       {/* Former Committee Link */}
       <div className="mt-10 rounded-2xl bg-kva-bg-alt p-8 text-center">

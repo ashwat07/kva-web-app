@@ -17,19 +17,25 @@ export default function InstallPrompt() {
     const standalone =
       window.matchMedia("(display-mode: standalone)").matches ||
       (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
-    setIsStandalone(standalone);
 
-    if (standalone) return;
+    if (standalone) {
+      queueMicrotask(() => setIsStandalone(true));
+      return;
+    }
 
     // iOS: no beforeinstallprompt, show manual instructions
     const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator as Navigator & { maxTouchPoints?: number }).maxTouchPoints > 2;
-    setIsIOS(ios);
 
-    if (ios) {
-      const dismissed = sessionStorage.getItem(DISMISS_KEY);
-      if (!dismissed) setVisible(true);
-      return;
-    }
+    queueMicrotask(() => {
+      setIsStandalone(false);
+      setIsIOS(ios);
+      if (ios) {
+        const dismissed = sessionStorage.getItem(DISMISS_KEY);
+        if (!dismissed) setVisible(true);
+      }
+    });
+
+    if (ios) return;
 
     // Chrome/Edge: capture install prompt and show our UI
     const handler = (e: Event) => {
