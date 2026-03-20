@@ -8,7 +8,6 @@ const events = [
     date: "2026-03-15",
     title: "Mother's Day Special - Mahila Vibhaga",
     time: "4:00 PM - 7:00 PM",
-    venue: "KVA Hall, Andheri West",
     type: "event",
     description:
       "Special event celebrating mothers organized by the Mahila Vibhaga.",
@@ -75,7 +74,7 @@ const events = [
     date: "2026-10-24",
     title: "Garba Night",
     time: "7:00 PM - 11:00 PM",
-    venue: "TBD",
+    venue: "Priya Vishwakarma Bhavan",
     type: "event",
     description:
       "Navratri Garba Night celebration organized by the Yuva Vibhaga. An evening of dance, music, and festivities.",
@@ -84,7 +83,7 @@ const events = [
     date: "2026-11-15",
     title: "Indoor Games",
     time: "9:00 AM - 5:00 PM",
-    venue: "TBD",
+    venue: "Priya Vishwakarma Bhavan",
     type: "sports",
     description:
       "Indoor games event featuring carrom, chess, table tennis, and more for all age groups.",
