@@ -10,22 +10,24 @@ const events = [
     time: "4:00 PM - 7:00 PM",
     venue: "KVA Hall, Andheri West",
     type: "event",
-    description: "Special event celebrating mothers organized by the Mahila Vibhaga.",
+    description:
+      "Special event celebrating mothers organized by the Mahila Vibhaga.",
   },
   {
     date: "2026-03-19",
     title: "Ugadi Celebration",
     time: "10:00 AM - 2:00 PM",
     type: "festival",
-    description: "Ugadi (Kannada New Year) celebration with traditional rituals and cultural programs.",
+    description:
+      "Ugadi (Kannada New Year) celebration with traditional rituals and cultural programs.",
   },
   {
     date: "2026-05-31",
     title: "Career Counseling & Vidyadanam Books Distribution",
     time: "10:00 AM - 4:00 PM",
-    venue: "KVA Hall, Andheri West",
     type: "event",
-    description: "Career guidance session for students along with Vidyadanam books distribution to support education.",
+    description:
+      "Career guidance session for students along with Vidyadanam books distribution to support education.",
   },
   {
     date: "2026-06-21",
@@ -33,7 +35,8 @@ const events = [
     time: "6:00 AM - 3:00 PM",
     venue: "Priya Vishwakarma Bhavan",
     type: "health",
-    description: "International Yoga Day celebration combined with health camp and blood donation drive.",
+    description:
+      "International Yoga Day celebration combined with health camp and blood donation drive.",
   },
   {
     date: "2026-07-05",
@@ -47,7 +50,6 @@ const events = [
     date: "2026-08-15",
     title: "Independence Day Celebration",
     time: "8:00 AM - 11:00 AM",
-    venue: "KVA Hall, Andheri West",
     type: "festival",
     description: "Flag hoisting and patriotic cultural programs.",
   },
@@ -57,7 +59,8 @@ const events = [
     time: "8:00 AM - 6:00 PM",
     venue: "TBD",
     type: "sports",
-    description: "Season 2 of the KVA Football League (KVAFL). Community football tournament.",
+    description:
+      "Season 2 of the KVA Football League (KVAFL). Community football tournament.",
   },
   {
     date: "2026-09-17",
@@ -65,7 +68,8 @@ const events = [
     time: "10:00 AM - 7:00 PM",
     venue: "BAPS Shri Swaminarayan Mandir, Malad East",
     type: "festival",
-    description: "Grand Vishwakarma Pooja celebration with cultural programs and community lunch.",
+    description:
+      "Grand Vishwakarma Pooja celebration with cultural programs and community lunch.",
   },
   {
     date: "2026-10-24",
@@ -73,7 +77,8 @@ const events = [
     time: "7:00 PM - 11:00 PM",
     venue: "TBD",
     type: "event",
-    description: "Navratri Garba Night celebration organized by the Yuva Vibhaga. An evening of dance, music, and festivities.",
+    description:
+      "Navratri Garba Night celebration organized by the Yuva Vibhaga. An evening of dance, music, and festivities.",
   },
   {
     date: "2026-11-15",
@@ -81,7 +86,8 @@ const events = [
     time: "9:00 AM - 5:00 PM",
     venue: "TBD",
     type: "sports",
-    description: "Indoor games event featuring carrom, chess, table tennis, and more for all age groups.",
+    description:
+      "Indoor games event featuring carrom, chess, table tennis, and more for all age groups.",
   },
   {
     date: "2026-12-06",
@@ -89,7 +95,8 @@ const events = [
     time: "7:00 AM - 6:00 PM",
     venue: "TBD",
     type: "sports",
-    description: "Annual outdoor sports day with track & field events, cricket, and fun games for the whole community.",
+    description:
+      "Annual outdoor sports day with track & field events, cricket, and fun games for the whole community.",
   },
   {
     date: "2027-01-10",
@@ -97,9 +104,9 @@ const events = [
     time: "8:00 AM - 6:00 PM",
     venue: "TBD",
     type: "event",
-    description: "Annual KVA family picnic. A fun-filled day out for the entire community.",
+    description:
+      "Annual KVA family picnic. A fun-filled day out for the entire community.",
   },
-  
 ];
 
 const typeColors: Record<string, string> = {
@@ -119,8 +126,18 @@ const typeLabels: Record<string, string> = {
 };
 
 const MONTHS = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 function getDaysInMonth(year: number, month: number) {
@@ -169,13 +186,25 @@ export default function EventsPage() {
             <div className="mb-4 flex items-center justify-between">
               <button
                 onClick={() => {
-                  if (currentMonth === 0) { setCurrentMonth(11); setCurrentYear((y) => y - 1); }
-                  else setCurrentMonth((m) => m - 1);
+                  if (currentMonth === 0) {
+                    setCurrentMonth(11);
+                    setCurrentYear((y) => y - 1);
+                  } else setCurrentMonth((m) => m - 1);
                 }}
                 className="rounded-lg p-2 hover:bg-gray-100"
               >
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                <svg
+                  className="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
                 </svg>
               </button>
               <h3 className="font-semibold text-kva-text">
@@ -183,19 +212,33 @@ export default function EventsPage() {
               </h3>
               <button
                 onClick={() => {
-                  if (currentMonth === 11) { setCurrentMonth(0); setCurrentYear((y) => y + 1); }
-                  else setCurrentMonth((m) => m + 1);
+                  if (currentMonth === 11) {
+                    setCurrentMonth(0);
+                    setCurrentYear((y) => y + 1);
+                  } else setCurrentMonth((m) => m + 1);
                 }}
                 className="rounded-lg p-2 hover:bg-gray-100"
               >
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                <svg
+                  className="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
                 </svg>
               </button>
             </div>
             <div className="grid grid-cols-7 gap-1 text-center text-xs font-medium text-kva-text-light">
               {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((d) => (
-                <div key={d} className="py-2">{d}</div>
+                <div key={d} className="py-2">
+                  {d}
+                </div>
               ))}
             </div>
             <div className="grid grid-cols-7 gap-1 text-center text-sm">
@@ -231,24 +274,40 @@ export default function EventsPage() {
             </h3>
             <div className="space-y-3">
               <div className="rounded-lg bg-purple-50 p-3">
-                <p className="text-xs font-semibold text-purple-700">Upcoming</p>
-                <p className="text-sm text-kva-text">Career Counseling &amp; Vidyadanam - May 31</p>
+                <p className="text-xs font-semibold text-purple-700">
+                  Upcoming
+                </p>
+                <p className="text-sm text-kva-text">
+                  Career Counseling &amp; Vidyadanam - May 31
+                </p>
               </div>
               <div className="rounded-lg bg-green-50 p-3">
                 <p className="text-xs font-semibold text-green-700">Health</p>
-                <p className="text-sm text-kva-text">Yoga Day / Health Camp - June 21</p>
+                <p className="text-sm text-kva-text">
+                  Yoga Day / Health Camp - June 21
+                </p>
               </div>
               <div className="rounded-lg bg-red-50 p-3">
                 <p className="text-xs font-semibold text-red-700">Sports</p>
-                <p className="text-sm text-kva-text">Badminton Tournament - July 5</p>
+                <p className="text-sm text-kva-text">
+                  Badminton Tournament - July 5
+                </p>
               </div>
               <div className="rounded-lg bg-orange-50 p-3">
-                <p className="text-xs font-semibold text-orange-700">Festival</p>
-                <p className="text-sm text-kva-text">Vishwakarma Pooja - Sept 17</p>
+                <p className="text-xs font-semibold text-orange-700">
+                  Festival
+                </p>
+                <p className="text-sm text-kva-text">
+                  Vishwakarma Pooja - Sept 17
+                </p>
               </div>
               <div className="rounded-lg bg-gray-50 p-3">
-                <p className="text-xs font-semibold text-gray-500">Shradhanjali</p>
-                <p className="text-sm text-kva-text">Check latest announcements</p>
+                <p className="text-xs font-semibold text-gray-500">
+                  Shradhanjali
+                </p>
+                <p className="text-sm text-kva-text">
+                  Check latest announcements
+                </p>
               </div>
             </div>
           </div>
@@ -284,29 +343,66 @@ export default function EventsPage() {
                     <span className="text-xs font-semibold text-primary-dark">
                       {MONTHS[d.getMonth()].slice(0, 3).toUpperCase()}
                     </span>
-                    <span className="text-2xl font-bold text-primary-dark">{d.getDate()}</span>
+                    <span className="text-2xl font-bold text-primary-dark">
+                      {d.getDate()}
+                    </span>
                   </div>
                   <div className="flex-1">
                     <div className="mb-1 flex flex-wrap items-center gap-2">
-                      <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${typeColors[event.type]}`}>
+                      <span
+                        className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${typeColors[event.type]}`}
+                      >
                         {typeLabels[event.type]}
                       </span>
                     </div>
-                    <h3 className="font-semibold text-kva-text">{event.title}</h3>
-                    <p className="mt-1 text-sm text-kva-text-light">{event.description}</p>
+                    <h3 className="font-semibold text-kva-text">
+                      {event.title}
+                    </h3>
+                    <p className="mt-1 text-sm text-kva-text-light">
+                      {event.description}
+                    </p>
                     <div className="mt-2 flex flex-wrap gap-4 text-xs text-kva-text-light">
                       <span className="flex items-center gap-1">
-                        <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        <svg
+                          className="h-3.5 w-3.5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
                         </svg>
                         {event.time}
                       </span>
                       <span className="flex items-center gap-1">
-                        <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                        {event.venue}
+                        {event.venue && (
+                          <>
+                            <svg
+                              className="h-3.5 w-3.5"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                              />
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                              />
+                            </svg>
+                            {event.venue}
+                          </>
+                        )}
                       </span>
                     </div>
                   </div>

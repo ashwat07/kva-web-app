@@ -1,156 +1,201 @@
-# Sharp on CI: Why It Failed and How We Fixed It
+# CI Native Binaries: Why Builds Failed on Linux and How We Fixed It
 
-This document explains why the **sharp** module failed to load on GitHub Actions (Linux) and how we fixed it. It is a reference for maintainers and for future CI or cross-platform issues.
-
----
-
-## 1. What is sharp?
-
-**sharp** is a Node.js library for high-performance image processing (resize, crop, format conversion, etc.). It is built on **libvips**, a native C library. Unlike pure JavaScript libraries, sharp ships **platform-specific native binaries** (`.node` files) for different operating systems and CPU architectures.
-
-In this repo, sharp is used by:
-
-- **`scripts/generate-thumbnails.mjs`** – generates resized gallery thumbnails and reads image dimensions.
-- The **build** step – because `package.json` has a `prebuild` script that runs `generate-thumbnails`, so every `npm run build` runs the thumbnail script, which `require()`s or `import`s sharp.
-
-So when CI runs `npm run build`, it eventually loads sharp. If the correct native binary for the CI runner’s platform is missing, the process throws and the build fails.
+This document explains why the build failed on **GitHub Actions** (Linux) with errors about **sharp**, **@tailwindcss/oxide**, and **lightningcss**, and why we run a single extra command in CI to fix it. It is written so that beginners can follow the full story.
 
 ---
 
-## 2. The error we saw
+## 1. Beginner concepts you need first
 
-On GitHub Actions (Ubuntu Linux, x64), the build failed with:
+### 1.1 What is “CI”?
+
+**CI** (Continuous Integration) means “run checks automatically when someone pushes code or opens a pull request.” In this repo, we use **GitHub Actions**: when you push or open a PR, a job runs on GitHub’s servers that installs dependencies, runs lint, typecheck, and **build**. That runner is always **Linux** (Ubuntu, x64). Your laptop might be **macOS** or Windows. So “your machine” and “CI” are **different operating systems**.
+
+### 1.2 What is a “native” Node.js package?
+
+Most npm packages are **pure JavaScript**: the same code runs on Windows, Mac, and Linux. Some packages use **native code** (C, C++, Rust, etc.) for speed. Those ship a small **binary** (a compiled file like `something.node`) that is **different for each OS and CPU**:
+
+- On **macOS (Apple Silicon)** you need the `darwin-arm64` binary.
+- On **macOS (Intel)** you need the `darwin-x64` binary.
+- On **Linux (most servers and GitHub Actions)** you need the `linux-x64` binary.
+- On **Windows** you need a `win32-...` binary.
+
+If the right binary for the current platform isn’t there, Node.js throws an error like “Cannot find module” or “Could not load the … module using the … runtime.”
+
+### 1.3 What are “optional dependencies”?
+
+To avoid installing every platform’s binary (which would make the install huge), some packages put these platform-specific binaries in **optional dependencies**. So the main package (e.g. `sharp`) is always installed, but npm only installs **one** of the optional packages—the one that matches the **machine where you run `npm install`**. So:
+
+- When **you** run `npm install` on your **Mac**, npm installs the **Mac** optional (e.g. `@img/sharp-darwin-arm64`).
+- When **CI** runs `npm ci` on **Linux**, it uses the **same** lockfile. Because of how the lockfile was generated (usually on your Mac), npm might **not** install the **Linux** optional. So on CI you end up with the JavaScript code but **no Linux binary** → error.
+
+### 1.4 What is the lockfile?
+
+**package-lock.json** (the “lockfile”) records the exact versions and optional dependencies that were resolved the last time someone ran `npm install` (often on a Mac). **`npm ci`** in CI installs **exactly** what the lockfile says. So if the lockfile was created on macOS, it can “lock in” only the macOS optionals, and on Linux the Linux optionals never get installed. That’s the root cause of our CI failures.
+
+---
+
+## 2. The three packages that failed (and why we need them)
+
+Our build uses three packages that ship **platform-specific native binaries**. Each one failed once on CI until we fixed it.
+
+| Package | What it does | Where it’s used in this repo |
+|--------|----------------|------------------------------|
+| **sharp** | Image processing (resize, crop, read dimensions). Uses native code (libvips). | `scripts/generate-thumbnails.mjs` (gallery thumbnails). Runs in **prebuild** before every build. |
+| **@tailwindcss/oxide** | Tailwind CSS v4’s Rust engine (parsing, compiling CSS). | Used by `@tailwindcss/postcss` and Tailwind. Loaded when Next.js compiles CSS. |
+| **lightningcss** | Very fast CSS parser/transformer (minify, vendor prefixes, etc.). | Used by Tailwind/Next for CSS. Error was: “Cannot find module '../lightningcss.linux-x64-gnu.node'”. |
+
+So:
+
+- **sharp** → needed for the thumbnail script during build.
+- **@tailwindcss/oxide** and **lightningcss** → needed when Next.js compiles your CSS (e.g. in `layout.tsx` and all Tailwind styles).
+
+If **any** of these is missing its Linux binary on the CI runner, the build fails with a “native binding” or “Cannot find module … .node” error.
+
+---
+
+## 3. The errors we saw (in order)
+
+### 3.1 Sharp
 
 ```text
 Error: Could not load the "sharp" module using the linux-x64 runtime
-Possible solutions:
-- Ensure optional dependencies can be installed:
-    npm install --include=optional sharp
-- Ensure your package manager supports multi-platform installation:
-    See https://sharp.pixelplumbing.com/install#cross-platform
-- Add platform-specific dependencies:
-    npm install --os=linux --cpu=x64 sharp
-...
-    at Object.<anonymous> (.../node_modules/sharp/lib/sharp.js:120:9)
 ```
 
-So:
+- **Meaning:** The sharp **JavaScript** was there, but the **linux-x64** native binary was not.
+- **When:** During build, when the prebuild script ran `generate-thumbnails.mjs` and it tried to load sharp.
 
-- The **JavaScript** part of sharp was present (the code in `node_modules/sharp`).
-- The **native binary** for **linux-x64** was missing or not loadable.
-- Sharp then threw and the build stopped.
+### 3.2 @tailwindcss/oxide
 
----
+```text
+Error: Cannot find native binding. npm has a bug related to optional dependencies ...
+    at ... node_modules/@tailwindcss/oxide/index.js
+```
 
-## 3. Why did the linux-x64 binary end up missing?
+- **Meaning:** The Tailwind/Oxide **JavaScript** was there, but the **Linux native binary** for Oxide was not.
+- **When:** During build, when Next.js/Tailwind tried to compile CSS (e.g. from `layout.tsx` or Tailwind).
 
-### 3.1 How sharp is installed
+### 3.3 Lightningcss
 
-The main package `sharp` declares many **optionalDependencies**: one (or more) per platform, e.g.:
+```text
+Error: Cannot find module '../lightningcss.linux-x64-gnu.node'
+Require stack:
+  ... node_modules/lightningcss/node/index.js
+  ... node_modules/@tailwindcss/node/dist/index.js
+  ...
+```
 
-- `@img/sharp-darwin-arm64` (macOS, Apple Silicon)
-- `@img/sharp-darwin-x64` (macOS, Intel)
-- `@img/sharp-linux-x64` (Linux, x86_64)
-- `@img/sharp-win32-x64` (Windows, x64)
-- etc.
+- **Meaning:** The lightningcss **JavaScript** was there, but the **Linux x64** native binary (`lightningcss.linux-x64-gnu.node`) was not.
+- **When:** During build, when Tailwind/Next tried to use lightningcss for CSS.
 
-When you run `npm install` or `npm ci`, npm:
-
-- Always installs the main `sharp` package.
-- For **optionalDependencies**, it typically installs only the one that matches the **current** platform (the machine where you run the install). That keeps installs fast and avoids pulling in binaries for every OS.
-
-So:
-
-- On a **Mac** (e.g. your laptop), `npm install` or `npm ci` tends to install the **darwin** optional dependency (e.g. `@img/sharp-darwin-arm64` or `sharp-darwin-x64`), and the lockfile records that.
-- On **GitHub Actions** the runner is **Linux x64**. When CI runs `npm ci`, it uses the **same** lockfile. Depending on npm version and how the lockfile was generated, npm may:
-  - Only install the optional dependency that was resolved when the lockfile was last updated (e.g. on your Mac, so only darwin), or
-  - Skip or fail to install the linux-x64 optional dependency in this environment.
-
-So in CI we end up with the sharp **JS** code but not the **linux-x64** native binary. When the script runs and sharp tries to load the native addon for the current platform (linux-x64), it fails and throws the error above.
-
-### 3.2 Summary
-
-| Where        | Platform   | What gets installed / used                    |
-|-------------|------------|-----------------------------------------------|
-| Your machine| macOS      | `sharp` + darwin optional (e.g. darwin-arm64)|
-| GitHub Actions | Linux x64 | `sharp` + lockfile may only reference darwin → **linux-x64 binary missing** |
-
-So the issue is **cross-platform**: lockfile and install behavior are tied to the platform where dependencies were last installed, and CI runs on a different platform.
+All three errors have the same **underlying cause**: on the CI runner (Linux), npm did not install the **Linux** optional dependency for these packages, so the native `.node` file was missing.
 
 ---
 
-## 4. How we fixed it
+## 4. Why did the Linux binaries end up missing?
 
-We did **not** change the lockfile or remove sharp. We added an extra step in CI so that on the **runner’s** platform the correct sharp binary is present.
+Short version:
 
-### 4.1 Change in the workflow
+1. **package-lock.json** was almost certainly generated on **your machine** (e.g. macOS) when you ran `npm install`.
+2. On that machine, npm installed only the **macOS** optional dependencies (e.g. `sharp-darwin-arm64`, Oxide for darwin, lightningcss for darwin).
+3. In **CI**, GitHub Actions runs on **Linux**. When the workflow runs **`npm ci`**, it uses the **same** lockfile. Because of how npm resolves optionals and the lockfile contents, npm often **does not** install the **Linux** optionals in this situation. So you get the JS code but not the `.node` files for Linux.
+4. When the build then runs on the Linux runner, each of these packages tries to load its native binary for **linux-x64** and fails.
 
-File: **`.github/workflows/pr-checks.yml`**
+So the issue is **cross-platform**: “works on my machine” (Mac) but “fails in CI” (Linux) because the lockfile and install behavior are tied to the platform where dependencies were last installed.
 
-After the normal dependency install, we added:
+---
+
+## 5. The fix: one extra step in CI
+
+We did **not** change the lockfile or remove any package. We added **one step** in the GitHub Actions workflow that runs **after** `npm ci` and **before** lint/build. That step tells npm: “on this Linux runner, install the Linux x64 binaries for these three packages.”
+
+### 5.1 The exact command
+
+In **`.github/workflows/pr-checks.yml`** we have:
 
 ```yaml
-# sharp has platform-specific native binaries; lockfile may have been generated on macOS
-- name: Install sharp for Linux (CI)
-  run: npm install --os=linux --cpu=x64 sharp
+# Native binaries (sharp, tailwindcss, lightningcss) are platform-specific;
+# lockfile generated on macOS may lack the Linux variants.
+- name: Install platform-specific binaries for Linux (CI)
+  run: npm install --os=linux --cpu=x64 sharp @tailwindcss/oxide lightningcss
 ```
 
-So the sequence is:
+So the **command** is:
 
-1. **Install dependencies** – `npm ci` (from lockfile; may not install linux-x64 optional).
-2. **Install sharp for Linux (CI)** – `npm install --os=linux --cpu=x64 sharp` forces npm to install sharp (and its optional dependency) for **linux-x64**, so the binary is present on the runner.
-3. **Lint / typecheck / build** – build runs, prebuild runs `generate-thumbnails.mjs`, sharp loads the linux-x64 binary and succeeds.
+```bash
+npm install --os=linux --cpu=x64 sharp @tailwindcss/oxide lightningcss
+```
 
-The flags:
+### 5.2 What each part means (beginner-friendly)
 
-- `--os=linux` – treat the environment as Linux for optional dependency resolution.
-- `--cpu=x64` – use the x86_64 variant.
+- **`npm install`**  
+  “Install (or fix) some packages.” We already ran `npm ci` in the step before; this second install only adds/repairs the **native** parts for the packages we list.
 
-So we are explicitly asking for the **linux-x64** sharp binary on the GitHub Actions runner. We do this only in CI; locally you keep using your own platform’s binary (e.g. darwin).
+- **`--os=linux`**  
+  “Pretend the current platform is **Linux** when choosing which optional dependency to install.” So npm will pick the **Linux** variant of each package’s optional binary, not the Mac or Windows one.
 
-### 4.2 Why this step is safe
+- **`--cpu=x64`**  
+  “Use the **x86_64** (64-bit Intel/AMD) variant.” GitHub Actions runners are `linux-x64`, so we need the `linux-x64` (or `linux-x64-gnu`) binaries. This flag ensures that.
 
-- **Does not replace `npm ci`** – We still install from the lockfile first. The sharp step only adds/ensures the correct native binary for the current (Linux) platform.
-- **Minimal change** – No changes to `package.json` or to the thumbnail script; only the workflow file is updated.
-- **Documented** – The comment in the workflow explains why the step exists, so future maintainers understand the cross-platform issue.
+- **`sharp`**  
+  The image library. This makes sure the **linux-x64** optional (e.g. `@img/sharp-linux-x64`) is installed so `generate-thumbnails.mjs` can load sharp on the runner.
 
----
+- **`@tailwindcss/oxide`**  
+  Tailwind’s Rust engine. This makes sure its **linux-x64** native binary is present so CSS compilation works on the runner.
 
-## 5. Other options (for reference)
+- **`lightningcss`**  
+  The CSS tool used by Tailwind/Next. This makes sure **lightningcss.linux-x64-gnu.node** (or the right Linux x64 binary) is present so the “Cannot find module … lightningcss.linux-x64-gnu.node” error goes away.
 
-Sharp’s error message and docs suggest alternatives. We did not use them as the primary fix, but they are useful to know:
+So in one line we say: “On this Linux x64 machine, ensure the Linux x64 native binaries for **sharp**, **@tailwindcss/oxide**, and **lightningcss** are installed.”
 
-| Approach | Command / idea | Note |
-|----------|----------------|------|
-| **Optional deps** | `npm install --include=optional sharp` | Ensures optional dependencies are installed; may still depend on lockfile/platform. |
-| **Platform flags** | `npm install --os=linux --cpu=x64 sharp` | **What we use** – explicitly request the Linux x64 binary in CI. |
-| **Rebuild** | `npm rebuild sharp` | Rebuilds native addons for current platform; can work if the right optional dep is already in the tree. |
-| **Generate lockfile on Linux** | Run `npm install` once in a Linux environment and commit the new lockfile | Can help npm resolve linux optionals in CI; more invasive and can change lockfile a lot. |
+### 5.3 Order of steps in the workflow
 
-If in the future the current step ever fails (e.g. npm changes behavior), trying `npm install --include=optional sharp` or `npm rebuild sharp` in CI is a reasonable next step.
+1. **Checkout** – get the repo code.
+2. **Setup Node.js** – install Node 20 and use npm cache.
+3. **Install dependencies** – run **`npm ci`** (install from lockfile; may still miss Linux optionals).
+4. **Install platform-specific binaries for Linux (CI)** – run **`npm install --os=linux --cpu=x64 sharp @tailwindcss/oxide lightningcss`** so the Linux binaries are there.
+5. **Lint** – run ESLint.
+6. **Typecheck** – run TypeScript check.
+7. **Build** – run **`npm run build`** (prebuild runs thumbnails → sharp; Next compiles CSS → Oxide and lightningcss). All three can now load their Linux binaries, so the build succeeds.
 
----
+### 5.4 Why this is safe
 
-## 6. Where sharp is used in this repo
-
-| Location | Purpose |
-|----------|--------|
-| `package.json` | `devDependencies.sharp` and `prebuild` script that runs thumbnail generation. |
-| `scripts/generate-thumbnails.mjs` | Imports sharp; resizes images, writes thumbnails, updates `gallery-manifest.json`. |
-| `npm run build` | Runs `prebuild` → `generate-thumbnails` → sharp is loaded; CI runs this on Linux. |
-
-So any CI job that runs `npm run build` (or runs the thumbnail script directly) on a Linux runner needs the linux-x64 sharp binary, which is why the workflow step is required.
+- We still use **`npm ci`** for the main install, so the rest of the dependency tree stays exactly as in the lockfile.
+- This step only **adds or repairs** the Linux binaries for these three packages. It doesn’t change your `package.json` or your app code.
+- It runs **only in CI** (on the Linux runner). On your Mac, you keep using the Mac binaries; nothing changes locally.
 
 ---
 
-## 7. Summary
+## 6. If you see another “Cannot find … .node” or “native binding” error
+
+If in the future the build fails with a similar error for **another** package (e.g. another native addon), you can:
+
+1. Read the error: it usually says which **package** and which **platform** (e.g. `linux-x64`) are missing.
+2. Add that **package name** to the same install command in the workflow, e.g.:
+   ```yaml
+   run: npm install --os=linux --cpu=x64 sharp @tailwindcss/oxide lightningcss THE_NEW_PACKAGE
+   ```
+3. Commit, push, and re-run the workflow.
+
+You still use the **same** flags: `--os=linux --cpu=x64` for GitHub Actions’ Linux x64 runners.
+
+---
+
+## 7. Summary table
 
 | What | Detail |
 |------|--------|
-| **Problem** | sharp failed in CI with “Could not load the sharp module using the linux-x64 runtime” because the Linux x64 native binary was not installed. |
-| **Cause** | sharp uses platform-specific optional dependencies; the lockfile was likely generated on macOS, so in CI (Linux) the linux-x64 optional wasn’t installed. |
-| **Fix** | After `npm ci`, add a step: `npm install --os=linux --cpu=x64 sharp` so the Linux x64 binary is present on the runner. |
-| **File changed** | `.github/workflows/pr-checks.yml` (one extra step). |
-| **References** | [sharp install docs](https://sharp.pixelplumbing.com/install), especially [cross-platform](https://sharp.pixelplumbing.com/install#cross-platform). |
+| **Problem** | Build failed on CI (Linux) with “Could not load sharp”, “Cannot find native binding” (Oxide), or “Cannot find module … lightningcss.linux-x64-gnu.node”. |
+| **Cause** | Lockfile was generated on macOS; on Linux, npm didn’t install the **Linux x64** optional dependencies for sharp, @tailwindcss/oxide, and lightningcss, so their native binaries were missing. |
+| **Fix** | After `npm ci`, run: `npm install --os=linux --cpu=x64 sharp @tailwindcss/oxide lightningcss` so the Linux x64 binaries are present on the runner. |
+| **Where** | `.github/workflows/pr-checks.yml` – one step: “Install platform-specific binaries for Linux (CI)”. |
+| **Why one command?** | All three packages have the same kind of issue (missing Linux optional). One install with `--os=linux --cpu=x64` and all three package names fixes them in a single step. |
 
-This gives a single place to look when someone asks “why does CI need that sharp step?” or “why did sharp fail on Linux?”
+---
+
+## 8. References
+
+- [sharp – Install (cross-platform)](https://sharp.pixelplumbing.com/install#cross-platform)
+- [npm optional dependencies](https://docs.npmjs.com/cli/v10/configuring-npm/package-json#optionaldependencies)
+- [GitHub Actions – Ubuntu runner](https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners) (Linux x64)
+
+This doc is the single place to look when someone asks: “Why does CI need that `npm install --os=linux --cpu=x64 ...` step?” or “Why did the build fail with sharp / Oxide / lightningcss on Linux?”
