@@ -48,7 +48,6 @@ const features = [
 
 const annualEvents = [
   "Shri Vishwakarma Mahotsava",
-  "Talents' Day",
   "Women's Day Celebration",
   "Children's Day",
   "Blood Donation & Medical Camps",

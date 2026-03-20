@@ -38,6 +38,7 @@ const mahilaVibhagaMembers = [
   { name: "Chandrakala S Acharya", role: "Member", photo: "/commitee-images/ladies-wing/chandrakala.jpeg" },
   { name: "Pramila B Acharya", role: "Member", photo: "/commitee-images/ladies-wing/pramila.jpeg" },
   { name: "Jyoti P Acharya", role: "Member", photo: "/commitee-images/ladies-wing/jyoti-prakash.jpeg" },
+  { name: "Sapna S Acharya", role: "Member", photo: "/commitee-images/ladies-wing/sapna.jpeg" },
 ];
 
 const yuvaMembers = [
